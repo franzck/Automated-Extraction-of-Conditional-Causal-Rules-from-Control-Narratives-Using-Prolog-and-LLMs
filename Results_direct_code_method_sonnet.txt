@@ -1,0 +1,780 @@
+Request ID: req_011CPzB1joCxwRueGzTLGNdg
+
+Systemprompt: You are a world-class process engineer and prolog expert. Please analyse the provided control narrative and provide prolog code that describes 
+the causal relationships between input process variables (PV) and output control variables (CV). The code should start with declarations of the measurement variables 
+with example values ["PV1(valuePV1).", "PV2(valuePV2)."], etc. Then, it should define the relationships between these variables, including the type of control 
+(direct or reverse acting) [causal_relation(PV1, CV1, reverse) :- condition].  
+
+CAUSAL RELATIONSHIP PRINCIPLES:
+1. ACTUAL INFLUENCE: Only create causal relationships where the input actually influences the output under current operating conditions.
+2. CONDITIONAL LOGIC: Use process logic to determine when relationships are active - consider operating modes, equipment status, and control configurations.
+3. AVOID REDUNDANCY: Don't create multiple identical relationships for the same input-output pair.
+4. CONSIDER ALL PATHS: Include all genuine causal influences (a controller may respond to setpoint, process feedback, feedforward signals, etc.).
+
+Key considerations:
+- Determine when control loops are active and operational
+- Identify which inputs are currently being used by the control system
+- Consider equipment failures, manual modes, and bypass conditions
+- Account for process-specific logic that enables/disables relationships
+- Ensure relationships reflect actual signal flow and control influence
+
+Example logic patterns:
+% Only when conditions make the relationship meaningful
+causal_relation(process_input, controller_output, direct) :-
+    controller_active,
+    input_valid,
+    operating_conditions_met.
+
+% Multiple inputs to same controller (all can be active simultaneously)
+causal_relation(setpoint, controller_output, direct) :-
+    controller_in_auto.
+causal_relation(process_measurement, controller_output, reverse) :-
+    controller_in_auto,
+    measurement_valid.
+
+The desired output should be queryable, providing the relationship from each input PV to the output CV (direct or reverse acting) under the 
+conditions specified by the initial statements.
+The queries that should be possible are: ?- active_causal_relations(R) returns all active causal relations,
+ ?- controller_status(S).     Returns if the controller is active under the current conditions,
+ 
+Minimal working example: 
+causal_relation(flow_rate, valve_position, indirect) :-
+    flow_controller_active.
+flow_controller_active.
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+controller_status(active) :-
+    flow_controller_active.
+
+IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file. 
+- No markdown formatting
+- No explanations  
+- No code blocks with ```
+- Just raw Prolog syntax ready for the compiler
+
+Question/Prompt: High Temperature Selector (>):
+         ***WHERE?*** - High selector function located in the control system, receiving input signals from three temperature transmitters (TT-002a, TT-002b, TT-002c) 
+         positioned at different locations in/around the reactor. Output signal feeds to TIC-002 temperature controller.
+         ***WHY?*** - Provides fail-safe temperature measurement by always selecting the highest temperature reading from multiple locations. Ensures reactor safety by 
+         preventing control action based on a potentially failed low-reading transmitter. Addresses spatial temperature variations and provides measurement redundancy for 
+         critical temperature control.
+         ***WHAT?*** - Automatic high signal selector that continuously compares three temperature input signals and forwards the highest value to the 
+         downstream temperature controller TIC-002. Includes signal validation, transmitter health monitoring, and deviation alarm functions between transmitter readings.
+         ***HOW?*** - Electronic high selector logic continuously compares the three 4-20mA temperature signals from TT-002a, TT-002b, and TT-002c. Algorithm selects maximum value 
+         and forwards to TIC-002. Includes transmitter failure detection based on signal validation and deviation limits between readings.WHEN?Operational continuously during 
+         all reactor operating modes. Remains active as long as reactor temperature control is required. Manual override capability available for maintenance or troubleshooting 
+         of individual transmitters.
+         ***WHAT IF?*** - One TT transmitter failure: Selector continues operation with highest of remaining two valid transmitters, failed transmitter alarm generated. Two TT 
+         transmitter failures: Selector outputs signal from remaining valid transmitter, high priority alarm, consider manual control backup. All TT transmitter failures: 
+         Selector failure alarm, emergency switch to manual temperature control using local temperature indicators. Large deviation between transmitters: Investigation alarm, 
+         potential process upset or multiple transmitter problems requiring immediate attention.
+
+Model: claude-sonnet-4-20250514
+
+Response:
+[ThinkingBlock(signature='EscKCkYIBBgCKkBEXrOm1XuW18q2Qdv3a5xgzvzMW0KGbUlfv6h84GZQiR/mGuVa9wNASxn+dw0A9T11upL/nqh21csbI2NgSPmEEgwnHhtgCH0rlonTQXcaDDgzv2yCRxGUXQD1FCIwbBqKiBMR48dsIT0VWsUSlL7hedqJkZ2e803SZqA8UrWEzSBy6ee9wlK/w+izPBZ2Kq4JRn3Kf2RuGE1EFLTxxOV0AjPWu/EyAXf0nVuNUgqhJu1aBuNG1O/luDNUltvPg1/8PnoHfx4lrCYYMTlTGPGJEH5xs4J/5YksFtrDHsAG3BcMeUx7fdj8cggLLQMPpq7UnQeIO2LpFlIxD22UTpDU07tKS/40UCOzCwqV7aiA0roDKdRAa0301knK2x4c7IpUzPbKM3vTLYvG0pSzAVd0LAqvxV6Iu6/MrdZPqiBdRIODPijYTaX40s4tb0SN+KTpvb14cIqybmlwlRFvTx/4uO4uMHvqGpccSeH4/6DcqJNErvi0mh5TJy54ZJeapPHveRZm8MLvLrm7GL9VNca4Yb2V8Xm0nZcNeEaRsGTJd9mdzflHHcsHJrhEb0rPPuBn/1Ynt6XW89ZRsSYq2SoKHerstaueghnWV0JDUnmkqH4F3G2TE7zGk79smebBWb9xuzVzgx9NCTEB2zABbZTINepAdNp65LmAEKJXJHWvGL9pZmoVBQ2U+Q3jWYV+FVg43andoav001WkvNwfHEi+Jd4TYOhB/VHFGjhOaPTG3JNdyb/CzeXaRVhOTD0PvKFiJDWoZNFw0wl/ZX/++HbdsSW3kvs32+DMshAmWMhqL1vgCU0/OS2m3J0+5OcME4jhCEaiWb9MFDwSmr8+8hA3Rz2jW3SX/VG6a4UplL+zeNS7YGcSY0GXIVsCGyND7y3acBup6UcrctxWYQc/YCKjeZmLngU1aiILTm/+2D9dGlHsGOYHUsu5psShUAKKl00vuurcIKBvB/Ozl5mpiFye/YNUc/4GQhh+04KXjA2y5m2agr+0/O/myWeUaoiLTKTzYjAMAbNE+BiMrE7uuFMduIbplJ9nl5gzREkea+/8jDOZ2cQDR7y/OCHyFGju2c6JJOxqpOQXN3convYG6cELmA9av4L/Zsfe5vCm37qclFoK+eK4iAr/CfDhNQ4oFge9eIw9v1ZSX25XUlghQD3SfE+BR0mR6WzDyOX1Aj5XsXRlS650O4PIRZcNbHyPGYOH3paj3Dry9RrCJze9oyGX+CNuzd1UPGGQYdKb5cGQ4NAEsYCXAHTkYeX6KHZqYZosp5lAh6juwj0dzk+cTabZn8LkwEXmS5lM5D0Om3Az+3pfS7wBGQ6okoQq9dBTu4Mre1mxZS5CguJNInM/UmgbD6uGdAZ4bAaCDkXyMlIFPvVk4hHvhjHco/hWjE/U/VuDsq3kT9GO6xadD0Uc72Wd91+T7LxnMR8wZGZu4INu1QTYzqYVGWGRz1Y2gYJyL7VtYD4GAHRzykJLJX7kmFIWXOaYUtVr9384w5U9JA6Xv/X3SJVIjgjZOj32mpXwRK5bq/1tcSWb+5kF4W1YTDfhGOk8KsrtnewqvePNuNst/WdqQ6R2kfJP6PSaJOlSozj4F7JaS/WDS5KUdMksr6s/RIH3IW/hXd4s00IzaaSMX8vMB+kjvsRFa3h+9O+3ROjqwTbaRSF1A2Sw85p2QbuUnX6qmZrwAWTIU3uWNwTE0cpaMWtng4KaC83iF9QjHiobFhtQBBvaf9K7DfHyh0sjVVerATfGGssGgalZ/3fq0ARJwe+Q+7oEgh8LAWHpYhgB', 
+thinking='Let me analyze this control narrative for the High Temperature Selector:
+
+The narrative describes:
+- High Temperature Selector receives inputs from three temperature transmitters: TT-002a, TT-002b, TT-002c
+- Output goes to temperature controller TIC-002
+- Selector always chooses the highest temperature value
+- Has failure detection and alarm functions
+- Operates continuously during reactor operation
+
+For the Prolog code, I need to:
+
+1. Declare the input variables (temperature transmitter values)
+2. Declare output variable (selected temperature to TIC-002)
+3. Define the causal relationships
+4. Consider operating conditions and failure modes
+
+Key relationships:
+- Each transmitter (TT-002a, TT-002b, TT-002c) can influence the selector output
+- The selector output influences TIC-002
+- Relationships are active when transmitters are valid and selector is operational
+- The relationship is "direct" because higher input temperatures result in higher output (when selected)
+
+I need to consider:
+- When each transmitter is valid/operational
+- When the selector itself is operational
+- The logic that determines which transmitter is actually influencing the output (highest value)', type='thinking'), TextBlock(citations=None, text='tt_002a(450.5).
+tt_002b(448.2).
+tt_002c(452.1).
+selector_output(452.1).
+
+tt_002a_valid.
+tt_002b_valid.
+tt_002c_valid.
+temperature_selector_operational.
+reactor_operating.
+
+causal_relation(tt_002a, selector_output, direct) :-
+    tt_002a_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002a_is_highest.
+
+causal_relation(tt_002b, selector_output, direct) :-
+    tt_002b_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002b_is_highest.
+
+causal_relation(tt_002c, selector_output, direct) :-
+    tt_002c_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002c_is_highest.
+
+tt_002a_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValA >= ValB,
+    ValA >= ValC.
+
+tt_002b_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValB >= ValA,
+    ValB >= ValC.
+
+tt_002c_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValC >= ValA,
+    ValC >= ValB.
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    temperature_selector_operational,
+    reactor_operating.
+
+controller_status(failed) :-
+    \+
+ temperature_selector_operational.
+
+controller_status(offline) :-
+    \+
+ reactor_operating.', type='text')]
+
+
+
+
+Request ID: req_011CPzB2qdj2jezUyccU4X1k
+
+Systemprompt: You are a world-class process engineer and prolog expert. Please analyse the provided control narrative and provide prolog code that describes 
+the causal relationships between input process variables (PV) and output control variables (CV). The code should start with declarations of the measurement variables 
+with example values ["PV1(valuePV1).", "PV2(valuePV2)."], etc. Then, it should define the relationships between these variables, including the type of control 
+(direct or reverse acting) [causal_relation(PV1, CV1, reverse) :- condition].  
+
+CAUSAL RELATIONSHIP PRINCIPLES:
+1. ACTUAL INFLUENCE: Only create causal relationships where the input actually influences the output under current operating conditions.
+2. CONDITIONAL LOGIC: Use process logic to determine when relationships are active - consider operating modes, equipment status, and control configurations.
+3. AVOID REDUNDANCY: Don't create multiple identical relationships for the same input-output pair.
+4. CONSIDER ALL PATHS: Include all genuine causal influences (a controller may respond to setpoint, process feedback, feedforward signals, etc.).
+
+Key considerations:
+- Determine when control loops are active and operational
+- Identify which inputs are currently being used by the control system
+- Consider equipment failures, manual modes, and bypass conditions
+- Account for process-specific logic that enables/disables relationships
+- Ensure relationships reflect actual signal flow and control influence
+
+Example logic patterns:
+% Only when conditions make the relationship meaningful
+causal_relation(process_input, controller_output, direct) :-
+    controller_active,
+    input_valid,
+    operating_conditions_met.
+
+% Multiple inputs to same controller (all can be active simultaneously)
+causal_relation(setpoint, controller_output, direct) :-
+    controller_in_auto.
+causal_relation(process_measurement, controller_output, reverse) :-
+    controller_in_auto,
+    measurement_valid.
+
+The desired output should be queryable, providing the relationship from each input PV to the output CV (direct or reverse acting) under the 
+conditions specified by the initial statements.
+The queries that should be possible are: ?- active_causal_relations(R) returns all active causal relations,
+ ?- controller_status(S).     Returns if the controller is active under the current conditions,
+ 
+Minimal working example: 
+causal_relation(flow_rate, valve_position, indirect) :-
+    flow_controller_active.
+flow_controller_active.
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+controller_status(active) :-
+    flow_controller_active.
+
+IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file. 
+- No markdown formatting
+- No explanations  
+- No code blocks with ```
+- Just raw Prolog syntax ready for the compiler
+
+Question/Prompt: Primary Control Loop: TIC-002 (Master Temperature Controller)
+***WHERE?*** - Master temperature controller receiving input from the high temperature selector. Located in the control system with output providing cascade setpoint 
+to FIC-001 flow controller. Controls overall reactor temperature through manipulation of inlet flow rate.
+***WHY?*** - Reactor temperature control is critical for safety, 
+product quality, reaction kinetics, and preventing thermal runaway. Cascade control strategy employed because flow changes provide faster temperature response than 
+direct thermal manipulation. Temperature control prevents equipment damage and maintains process efficiency.
+***WHAT?*** - Master controller in cascade control system that maintains reactor temperature at setpoint by manipulating the setpoint of the slave flow controller FIC-001. 
+Receives temperature feedback from high selector and provides flow setpoint output. Includes temperature indication, alarm functions, and emergency shutdown capabilities.
+***HOW?*** - PID temperature controller receives highest temperature signal from high selector, compares to temperature setpoint, and calculates required flow setpoint for FIC-001. 
+Controller output scaled to provide appropriate flow setpoint range. Includes adaptive tuning and anti-windup protection.
+WHEN? Operational during all reactor operating modes when temperature control is required. Active continuously during normal operation. Can be switched to manual mode during 
+startup/shutdown procedures or cascade system maintenance, providing fixed setpoint to FIC-001.
+***WHAT IF?*** - Input failure from high selector: Switch to manual mode, use backup temperature indication if available, consider controlled shutdown. High temperature alarm: 
+Controller automatically reduces flow setpoint to FIC-001, activates emergency cooling if configured. Controller failure: Break cascade, operate FIC-001 in manual mode with fixed 
+setpoint, implement manual temperature monitoring and control. Setpoint deviation: Check for process upsets, controller tuning issues, or equipment problems affecting heat removal.
+
+Model: claude-sonnet-4-20250514
+
+Response:
+[ThinkingBlock(signature='EukKCkYIBBgCKkAVrJbXAiT9cB/qnv+WVhbxFro5+zqfNRq9GTpVeU+2+2giM67xe335pJLLKYiEb9jk6xREXS7g040RziHn1JB0EgxU6u4MQaQDQCrDFQAaDEF2YTAKMven/50d/iIwCifDVAPeG4uq0BNjFdFo5iKftFdXinTqKUNg8HktqKBPCc/XPUpQHvMIFJDSRXFTKtAJEslcq2JIw/WkyUE6dLdwB6SvlA/h8vXqPx1Nr7Bc7Jv0m77PXUbcLVn6Plr3+7y/InioQLIe+yqd65FjaK7aPzAGZfy0mzZb90UHPYgHn/zl66cbfjuBDxWtocGbFk8P1eunAMwNC1D5sr3NReA8zqyw3A7PjerNcjUY/njqlpQA/3aCtJYBV2ou7dx3lkI6VvgUCXqRgfKTdutLx5D1uBC2Wp8JEnezYklgruBQiToNSzbsJ3lVWEd8CBDgRdOmPaxN2Fs+LXb9A188sKYhXqws5JzU/Mv1nTZ2EFDYj3+sJEMkt3l0Qk7WZpomkEaMnc1RDpntDpd1kPIyJzwPwmpSM7i1nJG3yxLyWArMP73Q1Z5gmIOGNYNTmpfEM4NNLdnx3k+TkfmEqLgOmpUiRtbIcX6/zIQnbOx3rbygZJaPQ3wIRG+G1wnAswbo8qSsQz0gH4DK4CXCTI4aqmwK91CbLES1F87Hw0loiKEnMbtIN2j++p5LbWK2E3eqto0loBNnLAPLDt8Lco29Wk0YCIZ9y9PUkbj0yktMxeu4Ps6liMy2k43bPFH/lf2p3jU66qX1VNRUyVqLnkA6e2md9owmpgri33PQqMlXxk5kCaJcKrHKbnLXYbPUkP3AXt8Oz1d6eMwG120UqqIJS+bD1LcR1t3fU7vSenUfGBWZXi5HPuPG6rQLwCBKuAjfvw4vO5RuWhxB+pyddnu5f861N0BW1/O/MaA+LJENcgtPicoHQiN1XkJPyZkWUz6ku994xgX8q3NFCuKqPx+lCJ8YdWNqK6MNcxmt1iRPk5ahlX68ZMtJIskYxj9UL5mwksXSvRIUI42rCOO/D0ThifSZPZ++KX3kUkh1VfN+Wx+lNAT9kZo+xmj1bGY2n0vku65yiqty1IxYQ572RReOSVm09n5XZMBHd3N4Z02fImLBVjGpxSdD32Xely2XPNqMg3RgO8cvz5NKVeQ6VPdYrYwoBEemuvqyl31kUpyBswbanMNS7daffPM7usCNt/xGsXs7BGmrdhMK4JbzNVKOIE7vmcHvBqSMTulIDmVY49sRPz4ZwPJydhsQwiTKwp84HgFqyT0yQVPGbR+DcmLxmdMVy4gKpPg7cmyhEvlE1bKhjhrgMozlL8UkwYk1Cy1eoSSzWtpwSMVZ4z5/SLB1MEt+R5+klpQbctJ4vZETYMTkGo/l8LGqiAMRDKO6lS3/5+yJnO172rJ/aBWX3/5Txz8iSUcEVVvNbsFxX8dD4OWag5KUwkE4BUQJ3y+NhR7OQc4fJ9ih/oeitKOMP38QQA8r16vfKmIHYOiBkzK7ziqCL7Gy7h2/w3Y1Du8KDe6meltIAl26UGP2gQEew6DxuSW805FZpvHaERRODqhCCSx6wCxGNSZhoCgdSWE99wM4lx969snZn2qHkaEOBqG8/+Mb7i+OjfdSzjVDygcgvV0k1UnF4istZTxCc/A7F7cbnH7ddowLVnRnCVP3IZTC5FA2zx1BowlUB4tyCkxckkkOmbEEu02CtrltZ0/asYEvTdecw10pr0JNJ3WZ19VcTHV2h1pXP7IJM6zw4ALYLthaHUoTtNNxFCVS2gBgyJP39mKENJ11SZuJyw34znQfhoQ4fItXot119l31FxivFYU2bB8YAQ==', 
+thinking="Let me analyze this control narrative for TIC-002:
+
+1. This is a master temperature controller (TIC-002) in a cascade control system
+2. It receives input from a high temperature selector 
+3. It outputs a setpoint to FIC-001 (flow controller)
+4. The controller is active during normal operation when temperature control is required
+5. It can be switched to manual mode during startup/shutdown or maintenance
+
+Key variables I need to identify:
+- Input: temperature from high selector (let's call it reactor_temperature)
+- Input: temperature setpoint (temperature_setpoint)
+- Output: flow setpoint to FIC-001 (flow_setpoint)
+
+Conditions that affect the relationships:
+- Controller must be in auto mode for normal cascade operation
+- Controller must be active/operational
+- High selector input must be valid
+- During manual mode, the relationship changes
+
+The causal relationships:
+1. temperature_setpoint -> flow_setpoint (direct acting - higher setpoint leads to higher flow setpoint to increase heating)
+2. reactor_temperature -> flow_setpoint (reverse acting - higher temperature leads to lower flow setpoint to reduce heating)
+
+Both relationships are only active when the controller is in auto mode and operational.", type='thinking'), TextBlock(citations=None, text='temperature_setpoint(350).
+reactor_temperature(345).
+flow_setpoint(75).
+controller_mode(auto).
+high_selector_valid(true).
+tic002_active(true).
+
+causal_relation(temperature_setpoint, flow_setpoint, direct) :-
+    tic002_cascade_active.
+
+causal_relation(reactor_temperature, flow_setpoint, reverse) :-
+    tic002_cascade_active.
+
+tic002_cascade_active :-
+    tic002_active(true),
+    controller_mode(auto),
+    high_selector_valid(true).
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    tic002_cascade_active.
+
+controller_status(manual) :-
+    tic002_active(true),
+    controller_mode(manual).
+
+controller_status(inactive) :-
+    tic002_active(false).', type='text')]
+
+
+
+
+Request ID: req_011CPzB3cNHPXGtAeM7a2BNo
+
+Systemprompt: You are a world-class process engineer and prolog expert. Please analyse the provided control narrative and provide prolog code that describes 
+the causal relationships between input process variables (PV) and output control variables (CV). The code should start with declarations of the measurement variables 
+with example values ["PV1(valuePV1).", "PV2(valuePV2)."], etc. Then, it should define the relationships between these variables, including the type of control 
+(direct or reverse acting) [causal_relation(PV1, CV1, reverse) :- condition].  
+
+CAUSAL RELATIONSHIP PRINCIPLES:
+1. ACTUAL INFLUENCE: Only create causal relationships where the input actually influences the output under current operating conditions.
+2. CONDITIONAL LOGIC: Use process logic to determine when relationships are active - consider operating modes, equipment status, and control configurations.
+3. AVOID REDUNDANCY: Don't create multiple identical relationships for the same input-output pair.
+4. CONSIDER ALL PATHS: Include all genuine causal influences (a controller may respond to setpoint, process feedback, feedforward signals, etc.).
+
+Key considerations:
+- Determine when control loops are active and operational
+- Identify which inputs are currently being used by the control system
+- Consider equipment failures, manual modes, and bypass conditions
+- Account for process-specific logic that enables/disables relationships
+- Ensure relationships reflect actual signal flow and control influence
+
+Example logic patterns:
+% Only when conditions make the relationship meaningful
+causal_relation(process_input, controller_output, direct) :-
+    controller_active,
+    input_valid,
+    operating_conditions_met.
+
+% Multiple inputs to same controller (all can be active simultaneously)
+causal_relation(setpoint, controller_output, direct) :-
+    controller_in_auto.
+causal_relation(process_measurement, controller_output, reverse) :-
+    controller_in_auto,
+    measurement_valid.
+
+The desired output should be queryable, providing the relationship from each input PV to the output CV (direct or reverse acting) under the 
+conditions specified by the initial statements.
+The queries that should be possible are: ?- active_causal_relations(R) returns all active causal relations,
+ ?- controller_status(S).     Returns if the controller is active under the current conditions,
+ 
+Minimal working example: 
+causal_relation(flow_rate, valve_position, indirect) :-
+    flow_controller_active.
+flow_controller_active.
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+controller_status(active) :-
+    flow_controller_active.
+
+IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file. 
+- No markdown formatting
+- No explanations  
+- No code blocks with ```
+- Just raw Prolog syntax ready for the compiler
+
+Question/Prompt: Secondary Control Loop: FIC-001 (Slave Flow Controller)
+    ***WHERE?*** - Slave flow controller in cascade arrangement with TIC-002, controlling inlet flow to reactor via control valve positioned upstream of reactor. 
+    Flow transmitter FT-001 provides process feedback. Receives external setpoint from TIC-002 master controller.
+    ***WHY?*** - Functions as slave controller in cascade system to     provide rapid response to flow disturbances before they can upset reactor temperature. 
+    Maintains precise flow control to achieve temperature control objectives determined by master controller TIC-002. Improves overall control system performance and disturbance 
+    rejection.
+    ***WHAT?*** - Slave flow controller accepting external setpoint from TIC-002 output and maintaining actual flow rate to match this setpoint. Provides fast inner loop control in 
+    cascade strategy. Includes flow indication, high/low flow alarms, and valve position indication for operational feedback.
+    ***HOW?*** - PID flow controller receives setpoint signal from TIC-002, compares to actual flow measurement from FT-001, and adjusts control valve position accordingly. 
+    Tuned for fast response without oscillation to minimize flow disturbances that could affect reactor temperature control.
+    ***WHEN?*** - Operational in cascade mode during normal reactor operation. Can be switched to manual mode with operator-defined setpoint when cascade is broken or during 
+    startup/shutdown sequences. Active whenever flow control to the reactor is required.
+    ***WHAT IF?*** - FT-001 failure: Switch to manual valve control, break cascade connection with TIC-002, rely on manual flow estimation and direct temperature control. 
+    Control valve failure: Isolate flow path, activate backup feed system if available, emergency reactor shutdown if no alternatives. Loss of setpoint from TIC-002: 
+    Controller maintains last received setpoint, switch to manual mode with operator-defined setpoint. Cascade communication failure: Break cascade, operate both controllers 
+    independently in manual mode.
+
+Model: claude-sonnet-4-20250514
+
+Response:
+[ThinkingBlock(signature='EvEJCkYIBBgCKkAZvqONJe+qvl4uRk7LEzgKcsjzSuOnwPv7joZRqeY7GXlUJmEeJuErKVHhCJfszk7wwNDEdeNqxq+g7E6PZ1p0EgygoqzEP988Vbfl38YaDIyhB13/U43M2qFqvSIwi/Ew/cC590WTth1hI2xARKMS59Cz6TJ6hDRfjLQqBC+ucDMcBP1bsadxJwhHNSy2KtgIc+YP1kTVjcu9xAp1PguZ9sPOc3Z9uf0eC4NOsH5bXFKpWTAcNTPR5St0DngJs5zcAGxm+FPm3PVgQWsUd/fiUqvXUPLl+1wRpMLEjvEm5er8LEXlLep4RIBSHjM4PAYarPpa2GH326XkAaS9bg7Ll2T509Tt7DMLRlSuPaQFdju4uOlLMoZJHUAJ8Z4KH239GNQl0gnMwxBkb2ZIIpuiQeUw3lo03XXC2CnDIbeA+QyyIpWbe2Ol1zfYxmimAFD1XN3QKOzVyVR10ra+CtfwYfFM5ydsPvOZ4PMei/akGkP7hMu0/TjAJfq3WVt+f0cjbVWjsDsEpQJPxyuSveBeaBWfy35zGGckR2GSMUIhEMO+7evzZZSa2qy7Yr1B2CEkrBR/vH9ybdxtfewGg1vV8NgtTYJS6RLpjgHsUfd82TBrJjI/IuWKQ+EgxkfoMZqj/iT5HGPB3r6Uu7yF94+CK4effD81VpQwkcC7tgA9UOKOEraU1iYzoBREMfBD0/LPP412TV4t8CLamwBV/vKH2jP3Nh/COchssS940NTjfezd/19EJidQN2SsykPD5ByvbznTks4LmWv31Ea3n52SxMCo/sHzBqS9pVi2wjkvgi6jyKEtqRPFG4QsPJ02TrLkSVOesRMsBmDMku6GMzejqsceEModl3OjuUzoqHFKKZU8STckey7J4kS72w45rHeRT7yo0AZyCM0NnDbx5qATOLUIsz6lC68S3fHPoaNsRnFcnlKmkbA+3FVDmkKroJVB7deZ1ZE3mn1paVCZopn6kMBKaeLuxxT0qK4/svTp6MqnLEJd/F1wbh+yV+lIKW5P2nmKyJOYWUop05kAbCRkbIBs7jz7BQYdPkphpEj10xTcQPtzjx5s/aOF/2H81aTxvXmCx4+14118bRH+4W/uJ/MuGQJtwELDeESVPaJiWqF+OqNFLA1MzV5MUxJbASOu1JuidsYtLuDhbsLl6OVlP3+Z/sHnBA5it7H4UkUykxHtFY8GsClGf/4vHUkqp3SXVretxdHjm9nmNn4+bw6s3zEp3o4vHB7YII0pZmlB66XUue1TIBhAvCfzGoURzJpTPb7UMmiqrvtTOt3ux9LAf77TBQ4l2CCVAUY4BBv1c0mijMPpsoYFrXSlAFZzk38dql6dt9eUBpGX+Qb2ANLEXWLs11voBajDJZNTG9cly5JfsK3VYNNzbZcvgmgBdxjeQiCj16D6jT2cqRZ2xDEsXPUr0bR5uc3OMqrQ+cyrX/rVWRBcJn2iL+yMxAP4f+U8nMxtrUPC+UEKDOkQjArDVxh1nxIUJ2oGdoNLwVDzP9nUq1BsLiabygmJENkJsjSjGEtRZpDDVl+ctIaHFeZL+FrxUEx8uKXCoFZiiDFgplTKi1e+741LvzM1cfCJ/Rv7ngYnmvnDk+9/eD3+e9GpJVI2ipmVbsXgjrzPKJWVnYApaoC3qz3XCIPeYpz7kXhpHaySdSnvu7gYAQ==', 
+thinking='Let me analyze this control narrative for FIC-001 (Slave Flow Controller):
+
+Key elements:
+1. This is a slave controller in a cascade system with master TIC-002
+2. It controls inlet flow to reactor via control valve
+3. Flow transmitter FT-001 provides process feedback
+4. Receives external setpoint from TIC-002 master controller
+5. Can operate in cascade mode or manual mode
+6. Has various failure scenarios described
+
+Process Variables (inputs):
+- TIC-002 output (setpoint to FIC-001)
+- FT-001 measurement (actual flow)
+- Manual setpoint (when in manual mode)
+
+Control Variables (outputs):
+- Control valve position
+
+Conditions for active relationships:
+- Controller must be operational
+- FT-001 must be functioning (not failed)
+- For cascade mode: TIC-002 must be providing setpoint
+- For manual mode: operator setpoint used instead
+
+Let me structure the Prolog code:
+
+1. Declare measurement variables with example values
+2. Define operating conditions/modes
+3. Define causal relationships based on operating mode
+4. Include failure scenarios that break relationships
+5. Provide query predicates', type='thinking'), TextBlock(citations=None, text='tic_002_output(45.2).
+ft_001_measurement(42.8).
+manual_setpoint(50.0).
+fic_001_mode(cascade).
+ft_001_status(normal).
+cascade_communication_status(normal).
+control_valve_status(normal).
+
+cascade_mode_active :-
+    fic_001_mode(cascade),
+    cascade_communication_status(normal).
+
+manual_mode_active :-
+    fic_001_mode(manual).
+
+ft_001_available :-
+    ft_001_status(normal).
+
+flow_controller_operational :-
+    control_valve_status(normal),
+    (cascade_mode_active; manual_mode_active).
+
+causal_relation(tic_002_output, control_valve_position, direct) :-
+    cascade_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+causal_relation(ft_001_measurement, control_valve_position, reverse) :-
+    flow_controller_operational,
+    ft_001_available.
+
+causal_relation(manual_setpoint, control_valve_position, direct) :-
+    manual_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    flow_controller_operational.
+
+controller_status(inactive) :-
+    \+
+ flow_controller_operational.', type='text')]
+
+
+
+
+Request ID: req_011CPzB4YkH4nkH6tsP89yK5
+
+Systemprompt: You are the supervisor of a team of a world-class process engineer and prolog expert. Your team solved the following task:
+Analyse the provided control narrative and provide prolog code that describes 
+    the causal relationships between input process variables (PV) and output control variables (CV). The code should start with declarations of the measurement variables 
+    with example values ["PV1(valuePV1).", "PV2(valuePV2)."], etc. Then, it should define the relationships between these variables, including the type of control 
+    (direct or reverse acting) [causal_relation(PV1, CV1, reverse) :- condition].  
+    The desired output should be queryable, providing the relationship from each input PV to the output CV (direct or reverse acting) und der the 
+    condiions specified by the inital statements.
+    The queries that should be possible are: ?- active_causal_relations(R) returns all active causal relations,
+     ?- controller_status(S).     Returns if the controller is active under the current conditions,
+Your task is now to harmonize the following prolog variable declarations and causal relations from all the codes into a single prolog file.
+You should remove any duplicates and ensure that the final code is a coherent and complete set of prolog rules that can be used to query the relationships 
+between process variables and control variables in the connected control loops. 
+
+    IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file. 
+    - No markdown formatting
+    - No explanations  
+    - No code blocks with ```
+    - Just raw Prolog syntax ready for the compiler
+    Remove any comments from the code, as they are not needed for the final output.
+    Ensure that the final code is syntactically correct and can be directly used in a Prolog environment.
+    Replace commands that are not compatible with the used prolog compiler e.g. \+
+ and \=
+ should be replaced with \+ and \= respectively.
+
+Question/Prompt:  Code 1: tt_002a(450.5).
+tt_002b(448.2).
+tt_002c(452.1).
+selector_output(452.1).
+
+tt_002a_valid.
+tt_002b_valid.
+tt_002c_valid.
+temperature_selector_operational.
+reactor_operating.
+
+causal_relation(tt_002a, selector_output, direct) :-
+    tt_002a_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002a_is_highest.
+
+causal_relation(tt_002b, selector_output, direct) :-
+    tt_002b_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002b_is_highest.
+
+causal_relation(tt_002c, selector_output, direct) :-
+    tt_002c_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002c_is_highest.
+
+tt_002a_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValA >= ValB,
+    ValA >= ValC.
+
+tt_002b_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValB >= ValA,
+    ValB >= ValC.
+
+tt_002c_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValC >= ValA,
+    ValC >= ValB.
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    temperature_selector_operational,
+    reactor_operating.
+
+controller_status(failed) :-
+    \+ temperature_selector_operational.
+
+controller_status(offline) :-
+    \+ reactor_operating.
+Code 2: temperature_setpoint(350).
+reactor_temperature(345).
+flow_setpoint(75).
+controller_mode(auto).
+high_selector_valid(true).
+tic002_active(true).
+
+causal_relation(temperature_setpoint, flow_setpoint, direct) :-
+    tic002_cascade_active.
+
+causal_relation(reactor_temperature, flow_setpoint, reverse) :-
+    tic002_cascade_active.
+
+tic002_cascade_active :-
+    tic002_active(true),
+    controller_mode(auto),
+    high_selector_valid(true).
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    tic002_cascade_active.
+
+controller_status(manual) :-
+    tic002_active(true),
+    controller_mode(manual).
+
+controller_status(inactive) :-
+    tic002_active(false).
+Code 3: tic_002_output(45.2).
+ft_001_measurement(42.8).
+manual_setpoint(50.0).
+fic_001_mode(cascade).
+ft_001_status(normal).
+cascade_communication_status(normal).
+control_valve_status(normal).
+
+cascade_mode_active :-
+    fic_001_mode(cascade),
+    cascade_communication_status(normal).
+
+manual_mode_active :-
+    fic_001_mode(manual).
+
+ft_001_available :-
+    ft_001_status(normal).
+
+flow_controller_operational :-
+    control_valve_status(normal),
+    (cascade_mode_active; manual_mode_active).
+
+causal_relation(tic_002_output, control_valve_position, direct) :-
+    cascade_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+causal_relation(ft_001_measurement, control_valve_position, reverse) :-
+    flow_controller_operational,
+    ft_001_available.
+
+causal_relation(manual_setpoint, control_valve_position, direct) :-
+    manual_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    flow_controller_operational.
+
+controller_status(inactive) :-
+    \+ flow_controller_operational. 
+
+Model: claude-sonnet-4-20250514
+
+Response:
+[ThinkingBlock(signature='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', 
+thinking='I need to harmonize the three Prolog codes by:
+1. Combining all variable declarations from the three codes
+2. Removing duplicates 
+3. Ensuring coherent and complete set of rules
+4. Making sure the final code can handle the specified queries
+
+Let me go through each code:
+
+Code 1 has:
+- Variables: tt_002a(450.5), tt_002b(448.2), tt_002c(452.1), selector_output(452.1)
+- Facts: tt_002a_valid, tt_002b_valid, tt_002c_valid, temperature_selector_operational, reactor_operating
+- Causal relations for temperature selector
+- Helper rules for highest temperature
+- active_causal_relations and controller_status queries
+
+Code 2 has:
+- Variables: temperature_setpoint(350), reactor_temperature(345), flow_setpoint(75), controller_mode(auto), high_selector_valid(true), tic002_active(true)
+- Causal relations for cascade control
+- Different controller_status rules
+
+Code 3 has:
+- Variables: tic_002_output(45.2), ft_001_measurement(42.8), manual_setpoint(50.0), fic_001_mode(cascade), ft_001_status(normal), cascade_communication_status(normal), control_valve_status(normal)
+- Causal relations for flow control
+- More controller_status rules
+
+I need to merge all these while avoiding duplicates in the active_causal_relations and controller_status predicates. I should combine them logically.
+
+The main challenge is that each code has its own active_causal_relations and controller_status definitions. I need to merge these appropriately.', type='thinking'), TextBlock(citations=None, text='tt_002a(450.5).
+tt_002b(448.2).
+tt_002c(452.1).
+selector_output(452.1).
+temperature_setpoint(350).
+reactor_temperature(345).
+flow_setpoint(75).
+controller_mode(auto).
+high_selector_valid(true).
+tic002_active(true).
+tic_002_output(45.2).
+ft_001_measurement(42.8).
+manual_setpoint(50.0).
+fic_001_mode(cascade).
+ft_001_status(normal).
+cascade_communication_status(normal).
+control_valve_status(normal).
+
+tt_002a_valid.
+tt_002b_valid.
+tt_002c_valid.
+temperature_selector_operational.
+reactor_operating.
+
+causal_relation(tt_002a, selector_output, direct) :-
+    tt_002a_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002a_is_highest.
+
+causal_relation(tt_002b, selector_output, direct) :-
+    tt_002b_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002b_is_highest.
+
+causal_relation(tt_002c, selector_output, direct) :-
+    tt_002c_valid,
+    temperature_selector_operational,
+    reactor_operating,
+    tt_002c_is_highest.
+
+causal_relation(temperature_setpoint, flow_setpoint, direct) :-
+    tic002_cascade_active.
+
+causal_relation(reactor_temperature, flow_setpoint, reverse) :-
+    tic002_cascade_active.
+
+causal_relation(tic_002_output, control_valve_position, direct) :-
+    cascade_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+causal_relation(ft_001_measurement, control_valve_position, reverse) :-
+    flow_controller_operational,
+    ft_001_available.
+
+causal_relation(manual_setpoint, control_valve_position, direct) :-
+    manual_mode_active,
+    ft_001_available,
+    flow_controller_operational.
+
+tt_002a_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValA >= ValB,
+    ValA >= ValC.
+
+tt_002b_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValB >= ValA,
+    ValB >= ValC.
+
+tt_002c_is_highest :-
+    tt_002a(ValA),
+    tt_002b(ValB),
+    tt_002c(ValC),
+    ValC >= ValA,
+    ValC >= ValB.
+
+tic002_cascade_active :-
+    tic002_active(true),
+    controller_mode(auto),
+    high_selector_valid(true).
+
+cascade_mode_active :-
+    fic_001_mode(cascade),
+    cascade_communication_status(normal).
+
+manual_mode_active :-
+    fic_001_mode(manual).
+
+ft_001_available :-
+    ft_001_status(normal).
+
+flow_controller_operational :-
+    control_valve_status(normal),
+    (cascade_mode_active; manual_mode_active).
+
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+controller_status(active) :-
+    temperature_selector_operational,
+    reactor_operating.
+
+controller_status(active) :-
+    tic002_cascade_active.
+
+controller_status(active) :-
+    flow_controller_operational.
+
+controller_status(failed) :-
+    \+
+ temperature_selector_operational.
+
+controller_status(offline) :-
+    \+
+ reactor_operating.
+
+controller_status(manual) :-
+    tic002_active(true),
+    controller_mode(manual).
+
+controller_status(inactive) :-
+    tic002_active(false).
+
+controller_status(inactive) :-
+    \+
+ flow_controller_operational.', type='text')]
