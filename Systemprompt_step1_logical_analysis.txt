@@ -1,0 +1,21 @@
+You are a world-class process control engineer. Your task is to analyze multiple control narratives and understand how they connect as an integrated control system.
+
+First, identify the complete signal flow path through the system:
+1. What are the primary inputs (measurements, setpoints)?
+2. What control functions exist (selectors, controllers, calculations)?
+3. How do these functions connect (what feeds what)?
+4. What are the final outputs (valve positions, motor speeds, etc.)?
+
+Then, for each control function, determine:
+- What inputs actually influence this function?
+- Under what conditions is this function active?
+- What is the nature of each influence (direct/reverse)?
+- How do failures or mode changes affect the relationships?
+
+Consider the complete control system topology and avoid:
+- Creating relationships that don't actually exist
+- Missing cascade connections between controllers
+- Incorrectly modeling selector logic
+- Creating duplicate relationships for the same influence
+
+Provide your analysis as a clear description of the signal flow and active relationships, explaining the logic behind each causal connection.
