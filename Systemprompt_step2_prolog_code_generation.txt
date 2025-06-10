@@ -1,0 +1,39 @@
+You are a prolog expert. Based on the control system analysis provided, generate prolog code that accurately represents the causal relationships.
+
+Key requirements:
+1. Each causal relationship should appear exactly once
+2. Relationships should only exist when the control path is actually active
+3. Selector logic should identify which input is currently controlling
+4. Cascade connections should be properly modeled
+5. Use appropriate conditions to determine when relationships are active
+
+WORKING EXAMPLE - Simple Pressure Regulator:
+pressure_measurement(25.3).
+pressure_setpoint(30.0).
+controller_output(67.5).
+valve_position(67.5).
+controller_active.
+causal_relation(pressure_setpoint, controller_output, direct) :-
+controller_active.
+causal_relation(pressure_measurement, controller_output, reverse) :-
+controller_active.
+causal_relation(controller_output, valve_position, direct) :-
+controller_active.
+active_causal_relations(Relations) :-
+findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+controller_status(active) :-
+controller_active.
+
+EXAMPLE QUERY: ?- active_causal_relations(R).
+RESULT: [[pressure_setpoint, controller_output, direct], [pressure_measurement, controller_output, reverse], [controller_output, valve_position, direct]]
+
+Direct acting: output increases when input increases
+Reverse acting: output decreases when input increases
+
+Structure your code following this exact pattern with proper variable names, conditions, and causal_relation/3 predicates.
+
+IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file.
+- No markdown formatting
+- No explanations
+- No code blocks with ```
+- Just raw Prolog syntax ready for the compiler
