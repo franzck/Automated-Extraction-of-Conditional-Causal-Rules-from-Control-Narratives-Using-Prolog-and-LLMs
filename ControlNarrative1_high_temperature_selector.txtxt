@@ -1,0 +1,17 @@
+High Temperature Selector (>):
+         ***WHERE?*** - High selector function located in the control system, receiving input signals from three temperature transmitters (TT-002a, TT-002b, TT-002c) 
+         positioned at different locations in/around the reactor. Output signal feeds to TIC-002 temperature controller.
+         ***WHY?*** - Provides fail-safe temperature measurement by always selecting the highest temperature reading from multiple locations. Ensures reactor safety by 
+         preventing control action based on a potentially failed low-reading transmitter. Addresses spatial temperature variations and provides measurement redundancy for 
+         critical temperature control.
+         ***WHAT?*** - Automatic high signal selector that continuously compares three temperature input signals and forwards the highest value to the 
+         downstream temperature controller TIC-002. Includes signal validation, transmitter health monitoring, and deviation alarm functions between transmitter readings.
+         ***HOW?*** - Electronic high selector logic continuously compares the three 4-20mA temperature signals from TT-002a, TT-002b, and TT-002c. Algorithm selects maximum value 
+         and forwards to TIC-002. Includes transmitter failure detection based on signal validation and deviation limits between readings.
+         ***WHEN?*** - Operational continuously during 
+         all reactor operating modes. Remains active as long as reactor temperature control is required. Manual override capability available for maintenance or troubleshooting 
+         of individual transmitters.
+         ***WHAT IF?*** - One TT transmitter failure: Selector continues operation with highest of remaining two valid transmitters, failed transmitter alarm generated. Two TT 
+         transmitter failures: Selector outputs signal from remaining valid transmitter, high priority alarm, consider manual control backup. All TT transmitter failures: 
+         Selector failure alarm, emergency switch to manual temperature control using local temperature indicators. Large deviation between transmitters: Investigation alarm, 
+         potential process upset or multiple transmitter problems requiring immediate attention.
