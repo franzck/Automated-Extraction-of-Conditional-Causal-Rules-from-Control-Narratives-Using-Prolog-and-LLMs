@@ -1,0 +1,724 @@
+Request ID: req_011CPqDJ1GGz5UexXZsmH6Pa
+
+Systemprompt: You are a world-class process control engineer. Your task is to analyze multiple control narratives and understand how they connect as an integrated control system.
+
+First, identify the complete signal flow path through the system:
+1. What are the primary inputs (measurements, setpoints)?
+2. What control functions exist (selectors, controllers, calculations)?
+3. How do these functions connect (what feeds what)?
+4. What are the final outputs (valve positions, motor speeds, etc.)?
+
+Then, for each control function, determine:
+- What inputs actually influence this function?
+- Under what conditions is this function active?
+- What is the nature of each influence (direct/reverse)?
+- How do failures or mode changes affect the relationships?
+
+Consider the complete control system topology and avoid:
+- Creating relationships that don't actually exist
+- Missing cascade connections between controllers
+- Incorrectly modeling selector logic
+- Creating duplicate relationships for the same influence
+
+Provide your analysis as a clear description of the signal flow and active relationships, explaining the logic behind each causal connection.
+
+Question/Prompt: High Temperature Selector (>):
+         ***WHERE?*** - High selector function located in the control system, receiving input signals from three temperature transmitters (TT-002a, TT-002b, TT-002c) 
+         positioned at different locations in/around the reactor. Output signal feeds to TIC-002 temperature controller.
+         ***WHY?*** - Provides fail-safe temperature measurement by always selecting the highest temperature reading from multiple locations. Ensures reactor safety by 
+         preventing control action based on a potentially failed low-reading transmitter. Addresses spatial temperature variations and provides measurement redundancy for 
+         critical temperature control.
+         ***WHAT?*** - Automatic high signal selector that continuously compares three temperature input signals and forwards the highest value to the 
+         downstream temperature controller TIC-002. Includes signal validation, transmitter health monitoring, and deviation alarm functions between transmitter readings.
+         ***HOW?*** - Electronic high selector logic continuously compares the three 4-20mA temperature signals from TT-002a, TT-002b, and TT-002c. Algorithm selects maximum value 
+         and forwards to TIC-002. Includes transmitter failure detection based on signal validation and deviation limits between readings.WHEN?Operational continuously during 
+         all reactor operating modes. Remains active as long as reactor temperature control is required. Manual override capability available for maintenance or troubleshooting 
+         of individual transmitters.
+         ***WHAT IF?*** - One TT transmitter failure: Selector continues operation with highest of remaining two valid transmitters, failed transmitter alarm generated. Two TT 
+         transmitter failures: Selector outputs signal from remaining valid transmitter, high priority alarm, consider manual control backup. All TT transmitter failures: 
+         Selector failure alarm, emergency switch to manual temperature control using local temperature indicators. Large deviation between transmitters: Investigation alarm, 
+         potential process upset or multiple transmitter problems requiring immediate attention.
+
+Model: claude-opus-4-20250514
+
+Response:
+[ThinkingBlock(signature='EuAKCkYIBBgCKkCcWfl8lg+qYcDnCQ/eRX5o3bTNQLmoiJhqPAd4OUj6Yjp02/A5Rdp9Vy+x+87JidF6iXFzLcn1Tdm6QHUSRnIMEgyVZ77z0oKuqj18RO4aDPeiBR561jt63/DlHiIwqaotYmdb49aEOMbvJKNwkAdNFUJSpOcsRo5mXtNGa90gitVpRfeW5AvASVRLpag1KscJZRTINkyZgmgBBmTRnonPssXmaCsFhUPqsP5O/coT5yjuzPVujJOQs2V5lFsnwcM18PuhaB2l/R1ub3ZdxkXOZqGTYpVtfaJu49XtuTXhf05z8EXXYO8LISjmnbBHSPkq64IpqBbFL8klRo0wIQ0akbPrKhGRCbp50YdVAIwhLOM//c1w/K+4CXneGPkezhWGn1/P4iLoXbWkb0sN/frpkFZVCGNQhmKWWzOM+fjU8qBOiWQfvGAYoR8Z31DKkPl1ojwGbMYz2a1vpmzhPPISD0Npd8ZDDKKJwN7XuM61WzM/JJZH4xzphE/YbredJcheJfeUpH2m/KfZODdTbUnwWhLMn2dtY941ZFDPV1LWwn/JtJd0gcpwd1dQ8gOXACbtjMFRWIO2giq+bU2aZwyWUw7vcStAGJMBwmObQ3LrJqANphVYaTAllTujL45o71pK41cY2JD63MN+TuyQjeB5kCBgGn//RzZt+0yGq5i7Q/7VKVqdRMl6PrmCArNx1NdSUfy4WYb479IT2q+Fk88KoxEc2vyeeTn5lXbHfiof1J7sJ4k/CryOoT0hiTdCK37KDr6Kou1U/L4lLHsQZYnGFVkuKuT5tsuF1fGhAyXUzrpiE+uBvYVfy0Hc/K8NKUlP3H+AvKRE/J5N/WDs6dw108ED02UtLNfX+RYs+GXw2p4ce6K35jzlz00vOgg/NnDAuOYq/cnpSMQ8Ot/IxrIzratkZfYMRYWgORsJC0EzPm5MLoQc3GlTIlpMGKnPHx7p0uB4FGp7y1Hbn4/K8RUWwivFAZFm+RDG/2POVXR6olsw+pmZu80+gHOULEmUGjBlsuas5L773AGtQDg4syVhOd2XTW/ri4huRirNVpvDZEN1gu2vlQCnyyKQOqPM2H+cnKWD525vRv7KLKfUCSzAaf3kV7tvMUML1ttwAmMdj03FysSPqK0ZuiKdFGqobgzqvoKVDifTgLrWs5OLnLXyKWr/SjtF+Fg4XQCEvv3EK7wuqLX11eQq3r3ENiJ5zuzRE0RJ7FfjZ0vwkV0HxOwqbhONeXnboxiDde4/QAWVjhRbgcQYQ/bxSk45jUAHRGusFHgRVkZVc2WygXsn8JhEoQU1N5SLPkMONAcZxmvBmz/DhN4peKO3QqIXIZKOvCA40Kc8E8J6TCodY64WrLBmiViyV0NXj9kdJI9PNzwmGfWI37mlfzRGMq6HaYLWZJG4LkZqmPROL/Y8x83SY2aLmb4yEx5bpuMDsCg9sdLXGP4IKgZqfjt/oOUFBteCNk4QkjPgEDBpRjYsYjDaobrZyEtDBdVKbp81cv30c1gLkb771kn6P5rXPGhm801jfjroS3EVGOdKjCtEFCKCG9J5VAcJrEEONvZykJMnWk5btYvwMLi6GAzpeDGm5/KQEcV1/OGm/ghCIqIejNEsLSpYWzGdUwZsxI3X3hz//O0HjkbP67av0Xla3pfGqSUFqpH9OK9Y5pxuxM9g6dA4Mr/SjOnvQuRcJ3Zz1todh/a9tT5SUgzDlO3BXNvCJtp41uYo/+i3nlII5Qsl0qVSDin4Mu74DmpUCs/AqmusbFfAm7GqORB7ahywizNoAkIGeVffB5ocYAm+3tVgm76EWDAFf76Bisjw5ccYAQ==', 
+thinking="Let me analyze this control narrative to understand the signal flow and relationships.
+
+From the narrative:
+1. Primary inputs: Three temperature transmitters (TT-002a, TT-002b, TT-002c) measuring reactor temperature at different locations
+2. Control function: High Temperature Selector (>) - compares three temperature signals and outputs the highest value
+3. Output destination: TIC-002 temperature controller
+
+Signal flow path:
+- TT-002a → High Selector
+- TT-002b → High Selector  
+- TT-002c → High Selector
+- High Selector → TIC-002
+
+The relationships:
+- Each temperature transmitter has a direct positive influence on the high selector output (when it's the highest reading)
+- The high selector output has a direct influence on TIC-002 setpoint or process variable input
+
+Key operational aspects:
+- Continuous operation during all reactor operating modes
+- Signal validation and transmitter health monitoring
+- Deviation alarms between readings
+- Manual override capability
+- Failure handling logic
+
+This is a measurement redundancy and safety system - by selecting the highest temperature, it ensures the reactor control system always acts on the most conservative (safest) temperature reading.", type='thinking'), TextBlock(citations=None, text='## Signal Flow Analysis
+
+### Primary Signal Path
+The control system implements a redundant temperature measurement scheme with the following signal flow:
+
+1. **Inputs**: Three temperature transmitters (TT-002a, TT-002b, TT-002c) positioned at different reactor locations, each providing 4-20mA signals representing temperature measurements
+2. **Control Function**: High Temperature Selector (>) that continuously compares the three input signals
+3. **Output**: Selected highest temperature value forwarded to temperature controller TIC-002
+
+### Active Relationships and Influences
+
+**Temperature Transmitters → High Selector**
+- **Nature**: Each transmitter provides a potential direct influence on the selector output
+- **Activation**: The transmitter with the highest reading at any given moment becomes the active input
+- **Influence Type**: Direct (higher temperature reading = higher output signal)
+- **Conditions**: Only valid signals participate in selection logic
+
+**High Selector → TIC-002**
+- **Nature**: Direct feed of selected temperature to the temperature controller
+- **Activation**: Continuous during all reactor operating modes
+- **Influence Type**: Direct (provides process variable input to controller)
+- **Conditions**: Active unless system is in manual override mode
+
+### Control Logic and Failure Handling
+
+The high selector implements intelligent signal management:
+- **Normal Operation**: All three transmitters provide valid signals; the highest reading determines reactor control action
+- **Single Failure**: System continues with two remaining transmitters; failed transmitter alarm generated
+- **Double Failure**: Operates on single remaining transmitter with high priority alarm
+- **Complete Failure**: Triggers emergency manual control mode
+
+### Safety Design Philosophy
+
+This configuration ensures fail-safe operation by:
+1. Preventing control based on erroneously low readings from failed transmitters
+2. Capturing spatial temperature variations across the reactor
+3. Maintaining control continuity through redundancy
+4. Providing clear failure indication and graceful degradation
+
+The high selector acts as a critical safety interlock, ensuring the temperature controller TIC-002 always receives the most conservative (highest) temperature measurement, thereby preventing potential overheating conditions that could occur if control were based on a failed low-reading transmitter.', type='text')]
+
+
+
+
+Request ID: req_011CPqDKt9CyQT5YxA48syyy
+
+Systemprompt: You are a world-class process control engineer. Your task is to analyze multiple control narratives and understand how they connect as an integrated control system.
+
+First, identify the complete signal flow path through the system:
+1. What are the primary inputs (measurements, setpoints)?
+2. What control functions exist (selectors, controllers, calculations)?
+3. How do these functions connect (what feeds what)?
+4. What are the final outputs (valve positions, motor speeds, etc.)?
+
+Then, for each control function, determine:
+- What inputs actually influence this function?
+- Under what conditions is this function active?
+- What is the nature of each influence (direct/reverse)?
+- How do failures or mode changes affect the relationships?
+
+Consider the complete control system topology and avoid:
+- Creating relationships that don't actually exist
+- Missing cascade connections between controllers
+- Incorrectly modeling selector logic
+- Creating duplicate relationships for the same influence
+
+Provide your analysis as a clear description of the signal flow and active relationships, explaining the logic behind each causal connection.
+
+Question/Prompt: Primary Control Loop: TIC-002 (Master Temperature Controller)
+***WHERE?*** - Master temperature controller receiving input from the high temperature selector. Located in the control system with output providing cascade setpoint 
+to FIC-001 flow controller. Controls overall reactor temperature through manipulation of inlet flow rate.
+***WHY?*** - Reactor temperature control is critical for safety, 
+product quality, reaction kinetics, and preventing thermal runaway. Cascade control strategy employed because flow changes provide faster temperature response than 
+direct thermal manipulation. Temperature control prevents equipment damage and maintains process efficiency.
+***WHAT?*** - Master controller in cascade control system that maintains reactor temperature at setpoint by manipulating the setpoint of the slave flow controller FIC-001. 
+Receives temperature feedback from high selector and provides flow setpoint output. Includes temperature indication, alarm functions, and emergency shutdown capabilities.
+***HOW?*** - PID temperature controller receives highest temperature signal from high selector, compares to temperature setpoint, and calculates required flow setpoint for FIC-001. 
+Controller output scaled to provide appropriate flow setpoint range. Includes adaptive tuning and anti-windup protection.
+WHEN? Operational during all reactor operating modes when temperature control is required. Active continuously during normal operation. Can be switched to manual mode during 
+startup/shutdown procedures or cascade system maintenance, providing fixed setpoint to FIC-001.
+***WHAT IF?*** - Input failure from high selector: Switch to manual mode, use backup temperature indication if available, consider controlled shutdown. High temperature alarm: 
+Controller automatically reduces flow setpoint to FIC-001, activates emergency cooling if configured. Controller failure: Break cascade, operate FIC-001 in manual mode with fixed 
+setpoint, implement manual temperature monitoring and control. Setpoint deviation: Check for process upsets, controller tuning issues, or equipment problems affecting heat removal.
+
+Model: claude-opus-4-20250514
+
+Response:
+[ThinkingBlock(signature='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', 
+thinking='Let me analyze this control narrative for TIC-002 (Master Temperature Controller).
+
+First, let me identify the signal flow:
+
+1. Primary inputs:
+   - Temperature measurement from a "high temperature selector" (this implies there are multiple temperature measurements, and a selector choosing the highest one)
+   - Temperature setpoint (operator-provided)
+
+2. Control functions:
+   - High temperature selector (upstream of TIC-002, selecting from multiple temperature inputs)
+   - TIC-002: PID temperature controller (master controller)
+   - FIC-001: Flow controller (slave controller, mentioned as receiving cascade setpoint from TIC-002)
+
+3. Connections:
+   - Multiple temperature measurements → High temperature selector
+   - High temperature selector output → TIC-002 process variable input
+   - Temperature setpoint → TIC-002 setpoint input
+   - TIC-002 output → FIC-001 setpoint (cascade connection)
+   - FIC-001 output → Final control element (likely a flow control valve)
+
+4. Final outputs:
+   - The narrative mentions "manipulation of inlet flow rate" so the final output is likely a valve position controlling reactor inlet flow
+
+Now let me analyze the relationships:
+
+For TIC-002:
+- Inputs that influence it:
+  * Temperature from high selector (process variable) - direct acting relationship (as temperature increases, controller increases output to call for more flow, assuming cooling service)
+  * Temperature setpoint - this is the reference
+  
+- Conditions when active:
+  * During all reactor operating modes when temperature control is required
+  * Can be switched to manual mode during startup/shutdown or maintenance
+  
+- Output:
+  * Provides flow setpoint to FIC-001 (cascade relationship)
+  
+- Failure modes:
+  * If high selector fails → switch to manual mode
+  * If TIC-002 fails → break cascade, operate FIC-001 manually
+  * High temperature alarm → automatically reduces flow setpoint (this suggests reverse acting - high temp reduces flow, so this must be a heating service, not cooling as I initially thought)
+ 
+I realize the controller\'s action is reverse acting. When temperature rises above setpoint, the system reduces inlet flow rate. This suggests the flow is providing heat to the reactor, with flow reduction serving as a temperature mitigation strategy. The control mechanism aims to quickly respond to temperature changes by manipulating flow, which provides faster thermal response than direct thermal interventions.', type='thinking'), TextBlock(citations=None, text='## Control System Analysis: TIC-002 Cascade Temperature Control
+
+### Signal Flow Path
+
+**Primary Inputs:**
+- Multiple temperature measurements from the reactor (implied by high selector presence)
+- Temperature setpoint (operator-provided)
+
+**Control Functions:**
+1. **High Temperature Selector** (upstream, not detailed but implied)
+   - Receives multiple temperature inputs
+   - Outputs the highest temperature value
+   
+2. **TIC-002** (Master Temperature Controller)
+   - PID controller with temperature indication and alarm functions
+   - Includes adaptive tuning and anti-windup protection
+   
+3. **FIC-001** (Slave Flow Controller - referenced but not detailed)
+   - Receives cascade setpoint from TIC-002
+   - Controls inlet flow rate
+
+**Signal Flow Sequence:**
+```
+Multiple Temperature Sensors → High Selector → TIC-002 (PV input)
+Temperature Setpoint → TIC-002 (SP input)
+TIC-002 Output → FIC-001 Setpoint (Cascade)
+FIC-001 Output → Flow Control Valve (Final Element)
+```
+
+### Active Relationships and Control Logic
+
+**TIC-002 Relationships:**
+
+1. **Temperature Measurement → TIC-002 (Reverse Acting)**
+   - The high selector output provides the process variable
+   - Based on the alarm response (high temperature reduces flow), this is a reverse-acting controller
+   - As temperature rises above setpoint, TIC-002 reduces its output (flow setpoint to FIC-001)
+   - This indicates the inlet flow adds heat to the reactor
+
+2. **TIC-002 → FIC-001 (Cascade Master-Slave)**
+   - TIC-002 output directly sets the setpoint for FIC-001
+   - This is an active cascade relationship during normal operation
+   - The flow controller provides faster disturbance rejection for flow variations
+   - Temperature controller provides the overall temperature regulation
+
+**Operating Conditions:**
+
+- **Normal Operation:** Full cascade control active, TIC-002 continuously adjusts FIC-001 setpoint based on temperature deviation
+- **Manual Mode:** TIC-002 provides fixed setpoint to FIC-001 (operator-determined)
+- **High Temperature Alarm:** TIC-002 automatically reduces flow setpoint, may activate emergency cooling
+- **Cascade Break:** FIC-001 operates independently with manual setpoint
+
+**Failure Mode Impacts:**
+
+1. **High Selector Failure:** 
+   - Cascade relationship remains but temperature feedback compromised
+   - Operator must switch TIC-002 to manual mode
+   
+2. **TIC-002 Failure:**
+   - Cascade relationship broken
+   - FIC-001 must operate with local setpoint
+   
+3. **Communication Failure:**
+   - Loss of cascade setpoint transmission
+   - FIC-001 reverts to last good value or manual mode
+
+The control strategy leverages cascade control to achieve tight temperature regulation while quickly rejecting flow disturbances. The high selector ensures conservative control by always controlling to the highest (most critical) temperature point in the reactor.', type='text')]
+
+
+
+
+Request ID: req_011CPqDP8NoAcPHiscNE4XDa
+
+Systemprompt: You are a world-class process control engineer. Your task is to analyze multiple control narratives and understand how they connect as an integrated control system.
+
+First, identify the complete signal flow path through the system:
+1. What are the primary inputs (measurements, setpoints)?
+2. What control functions exist (selectors, controllers, calculations)?
+3. How do these functions connect (what feeds what)?
+4. What are the final outputs (valve positions, motor speeds, etc.)?
+
+Then, for each control function, determine:
+- What inputs actually influence this function?
+- Under what conditions is this function active?
+- What is the nature of each influence (direct/reverse)?
+- How do failures or mode changes affect the relationships?
+
+Consider the complete control system topology and avoid:
+- Creating relationships that don't actually exist
+- Missing cascade connections between controllers
+- Incorrectly modeling selector logic
+- Creating duplicate relationships for the same influence
+
+Provide your analysis as a clear description of the signal flow and active relationships, explaining the logic behind each causal connection.
+
+Question/Prompt: Secondary Control Loop: FIC-001 (Slave Flow Controller)
+    ***WHERE?*** - Slave flow controller in cascade arrangement with TIC-002, controlling inlet flow to reactor via control valve positioned upstream of reactor. 
+    Flow transmitter FT-001 provides process feedback. Receives external setpoint from TIC-002 master controller.
+    ***WHY?*** - Functions as slave controller in cascade system to     provide rapid response to flow disturbances before they can upset reactor temperature. 
+    Maintains precise flow control to achieve temperature control objectives determined by master controller TIC-002. Improves overall control system performance and disturbance 
+    rejection.
+    ***WHAT?*** - Slave flow controller accepting external setpoint from TIC-002 output and maintaining actual flow rate to match this setpoint. Provides fast inner loop control in 
+    cascade strategy. Includes flow indication, high/low flow alarms, and valve position indication for operational feedback.
+    ***HOW?*** - PID flow controller receives setpoint signal from TIC-002, compares to actual flow measurement from FT-001, and adjusts control valve position accordingly. 
+    Tuned for fast response without oscillation to minimize flow disturbances that could affect reactor temperature control.
+    ***WHEN?*** - Operational in cascade mode during normal reactor operation. Can be switched to manual mode with operator-defined setpoint when cascade is broken or during 
+    startup/shutdown sequences. Active whenever flow control to the reactor is required.
+    ***WHAT IF?*** - FT-001 failure: Switch to manual valve control, break cascade connection with TIC-002, rely on manual flow estimation and direct temperature control. 
+    Control valve failure: Isolate flow path, activate backup feed system if available, emergency reactor shutdown if no alternatives. Loss of setpoint from TIC-002: 
+    Controller maintains last received setpoint, switch to manual mode with operator-defined setpoint. Cascade communication failure: Break cascade, operate both controllers 
+    independently in manual mode.
+
+Model: claude-opus-4-20250514
+
+Response:
+[ThinkingBlock(signature='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', thinking="Let me analyze this control narrative for FIC-001, which is a slave flow controller in a cascade arrangement with TIC-002 (the master temperature controller).
+
+Key Components:
+1. FIC-001 - Slave flow controller
+2. FT-001 - Flow transmitter (provides flow measurement)
+3. TIC-002 - Master temperature controller (provides setpoint to FIC-001)
+4. Control valve - Final control element positioned upstream of reactor
+
+Signal Flow Path:
+1. Primary inputs:
+   - Flow measurement from FT-001
+   - Setpoint from TIC-002 (external setpoint)
+
+2. Control function:
+   - FIC-001 PID controller
+
+3. Output:
+   - Control valve position (to control inlet flow to reactor)
+
+Relationships:
+1. TIC-002 → FIC-001 (setpoint)
+   - Direct influence: TIC-002's output becomes FIC-001's setpoint
+   - Active when: FIC-001 is in cascade mode
+   - Nature: Direct (increase in TIC-002 output increases FIC-001 setpoint)
+
+2. FT-001 → FIC-001 (process variable)
+   - Direct influence: Flow measurement is the process variable for FIC-001
+   - Active when: Always when FIC-001 is operational
+   - Nature: This is the feedback signal
+
+3. FIC-001 → Control valve
+   - Direct influence: FIC-001 output adjusts valve position
+   - Active when: FIC-001 is in either cascade or manual mode
+   - Nature: Direct (increase in controller output increases valve opening)
+
+Failure Modes:
+- FT-001 failure: Manual valve control, break cascade
+- Control valve failure: Isolate flow, activate backup system
+- Loss of TIC-002 setpoint: Maintain last setpoint or switch to manual
+- Cascade communication failure: Both controllers operate independently
+
+This is a classic cascade control arrangement where the master temperature controller (TIC-002) adjusts the setpoint of the slave flow controller (FIC-001) to maintain reactor temperature by manipulating inlet flow.", type='thinking'), TextBlock(citations=None, text="## Signal Flow Analysis
+
+### Primary Signal Path:
+1. **Flow Measurement (FT-001)** → FIC-001 as process variable
+2. **Temperature Controller Output (TIC-002)** → FIC-001 as external setpoint
+3. **FIC-001 Controller Output** → Control Valve position
+4. **Control Valve** → Reactor inlet flow (physical process)
+
+### Control System Topology:
+
+This represents a classic cascade control architecture with:
+- **Master Loop**: TIC-002 controlling reactor temperature (outer/slow loop)
+- **Slave Loop**: FIC-001 controlling inlet flow (inner/fast loop)
+
+### Active Relationships:
+
+**1. TIC-002 → FIC-001 (Cascade Setpoint)**
+- **Nature**: Direct influence - TIC-002's output becomes FIC-001's setpoint
+- **Active Conditions**: When FIC-001 is in CASCADE mode during normal operation
+- **Purpose**: Master controller adjusts flow setpoint to maintain reactor temperature
+- **Failure Behavior**: On communication loss, FIC-001 holds last setpoint or switches to manual
+
+**2. FT-001 → FIC-001 (Process Feedback)**
+- **Nature**: Direct measurement feedback
+- **Active Conditions**: Always active when FIC-001 is operational
+- **Purpose**: Provides actual flow rate for comparison with setpoint
+- **Failure Behavior**: Forces switch to manual valve control, breaks cascade
+
+**3. FIC-001 → Control Valve (Manipulated Variable)**
+- **Nature**: Direct control - controller output positions valve
+- **Active Conditions**: Active in both CASCADE and MANUAL modes
+- **Purpose**: Adjusts valve opening to maintain desired flow rate
+- **Failure Behavior**: Valve failure triggers backup systems or emergency shutdown
+
+### Control Logic:
+
+The cascade arrangement provides:
+- **Fast disturbance rejection**: Flow disturbances are corrected by FIC-001 before affecting reactor temperature
+- **Improved stability**: Inner loop is tuned for fast response, outer loop for stable temperature control
+- **Operational flexibility**: Can break cascade and operate loops independently during abnormal conditions
+
+The system maintains reactor temperature indirectly by precisely controlling inlet flow, with the temperature controller determining the required flow rate and the flow controller executing that requirement.", type='text')]
+
+
+
+
+Request ID: req_011CPqDR1cJkHrryQdDdMnu9
+
+Systemprompt: You are a prolog expert. Based on the control system analysis provided, generate prolog code that accurately represents the causal relationships.
+
+Key requirements:
+1. Each causal relationship should appear exactly once
+2. Relationships should only exist when the control path is actually active
+3. Selector logic should identify which input is currently controlling
+4. Cascade connections should be properly modeled
+5. Use appropriate conditions to determine when relationships are active
+
+WORKING EXAMPLE - Simple Pressure Regulator:
+pressure_measurement(25.3).
+pressure_setpoint(30.0).
+controller_output(67.5).
+valve_position(67.5).
+controller_active.
+causal_relation(pressure_setpoint, controller_output, direct) :-
+controller_active.
+causal_relation(pressure_measurement, controller_output, reverse) :-
+controller_active.
+causal_relation(controller_output, valve_position, direct) :-
+controller_active.
+active_causal_relations(Relations) :-
+findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+controller_status(active) :-
+controller_active.
+
+EXAMPLE QUERY: ?- active_causal_relations(R).
+RESULT: [[pressure_setpoint, controller_output, direct], [pressure_measurement, controller_output, reverse], [controller_output, valve_position, direct]]
+
+Direct acting: output increases when input increases
+Reverse acting: output decreases when input increases
+
+Structure your code following this exact pattern with proper variable names, conditions, and causal_relation/3 predicates.
+
+IMPORTANT: Return ONLY the Prolog code that can be directly saved to a .pl file.
+- No markdown formatting
+- No explanations
+- No code blocks with ```
+- Just raw Prolog syntax ready for the compiler
+
+
+Question/Prompt:  Code 1: ## Signal Flow Analysis
+
+### Primary Signal Path
+The control system implements a redundant temperature measurement scheme with the following signal flow:
+
+1. **Inputs**: Three temperature transmitters (TT-002a, TT-002b, TT-002c) positioned at different reactor locations, each providing 4-20mA signals representing temperature measurements
+2. **Control Function**: High Temperature Selector (>) that continuously compares the three input signals
+3. **Output**: Selected highest temperature value forwarded to temperature controller TIC-002
+
+### Active Relationships and Influences
+
+**Temperature Transmitters → High Selector**
+- **Nature**: Each transmitter provides a potential direct influence on the selector output
+- **Activation**: The transmitter with the highest reading at any given moment becomes the active input
+- **Influence Type**: Direct (higher temperature reading = higher output signal)
+- **Conditions**: Only valid signals participate in selection logic
+
+**High Selector → TIC-002**
+- **Nature**: Direct feed of selected temperature to the temperature controller
+- **Activation**: Continuous during all reactor operating modes
+- **Influence Type**: Direct (provides process variable input to controller)
+- **Conditions**: Active unless system is in manual override mode
+
+### Control Logic and Failure Handling
+
+The high selector implements intelligent signal management:
+- **Normal Operation**: All three transmitters provide valid signals; the highest reading determines reactor control action
+- **Single Failure**: System continues with two remaining transmitters; failed transmitter alarm generated
+- **Double Failure**: Operates on single remaining transmitter with high priority alarm
+- **Complete Failure**: Triggers emergency manual control mode
+
+### Safety Design Philosophy
+
+This configuration ensures fail-safe operation by:
+1. Preventing control based on erroneously low readings from failed transmitters
+2. Capturing spatial temperature variations across the reactor
+3. Maintaining control continuity through redundancy
+4. Providing clear failure indication and graceful degradation
+
+The high selector acts as a critical safety interlock, ensuring the temperature controller TIC-002 always receives the most conservative (highest) temperature measurement, thereby preventing potential overheating conditions that could occur if control were based on a failed low-reading transmitter.
+Code 2: ## Control System Analysis: TIC-002 Cascade Temperature Control
+
+### Signal Flow Path
+
+**Primary Inputs:**
+- Multiple temperature measurements from the reactor (implied by high selector presence)
+- Temperature setpoint (operator-provided)
+
+**Control Functions:**
+1. **High Temperature Selector** (upstream, not detailed but implied)
+   - Receives multiple temperature inputs
+   - Outputs the highest temperature value
+   
+2. **TIC-002** (Master Temperature Controller)
+   - PID controller with temperature indication and alarm functions
+   - Includes adaptive tuning and anti-windup protection
+   
+3. **FIC-001** (Slave Flow Controller - referenced but not detailed)
+   - Receives cascade setpoint from TIC-002
+   - Controls inlet flow rate
+
+**Signal Flow Sequence:**
+```
+Multiple Temperature Sensors → High Selector → TIC-002 (PV input)
+Temperature Setpoint → TIC-002 (SP input)
+TIC-002 Output → FIC-001 Setpoint (Cascade)
+FIC-001 Output → Flow Control Valve (Final Element)
+```
+
+### Active Relationships and Control Logic
+
+**TIC-002 Relationships:**
+
+1. **Temperature Measurement → TIC-002 (Reverse Acting)**
+   - The high selector output provides the process variable
+   - Based on the alarm response (high temperature reduces flow), this is a reverse-acting controller
+   - As temperature rises above setpoint, TIC-002 reduces its output (flow setpoint to FIC-001)
+   - This indicates the inlet flow adds heat to the reactor
+
+2. **TIC-002 → FIC-001 (Cascade Master-Slave)**
+   - TIC-002 output directly sets the setpoint for FIC-001
+   - This is an active cascade relationship during normal operation
+   - The flow controller provides faster disturbance rejection for flow variations
+   - Temperature controller provides the overall temperature regulation
+
+**Operating Conditions:**
+
+- **Normal Operation:** Full cascade control active, TIC-002 continuously adjusts FIC-001 setpoint based on temperature deviation
+- **Manual Mode:** TIC-002 provides fixed setpoint to FIC-001 (operator-determined)
+- **High Temperature Alarm:** TIC-002 automatically reduces flow setpoint, may activate emergency cooling
+- **Cascade Break:** FIC-001 operates independently with manual setpoint
+
+**Failure Mode Impacts:**
+
+1. **High Selector Failure:** 
+   - Cascade relationship remains but temperature feedback compromised
+   - Operator must switch TIC-002 to manual mode
+   
+2. **TIC-002 Failure:**
+   - Cascade relationship broken
+   - FIC-001 must operate with local setpoint
+   
+3. **Communication Failure:**
+   - Loss of cascade setpoint transmission
+   - FIC-001 reverts to last good value or manual mode
+
+The control strategy leverages cascade control to achieve tight temperature regulation while quickly rejecting flow disturbances. The high selector ensures conservative control by always controlling to the highest (most critical) temperature point in the reactor.
+Code 3: ## Signal Flow Analysis
+
+### Primary Signal Path:
+1. **Flow Measurement (FT-001)** → FIC-001 as process variable
+2. **Temperature Controller Output (TIC-002)** → FIC-001 as external setpoint
+3. **FIC-001 Controller Output** → Control Valve position
+4. **Control Valve** → Reactor inlet flow (physical process)
+
+### Control System Topology:
+
+This represents a classic cascade control architecture with:
+- **Master Loop**: TIC-002 controlling reactor temperature (outer/slow loop)
+- **Slave Loop**: FIC-001 controlling inlet flow (inner/fast loop)
+
+### Active Relationships:
+
+**1. TIC-002 → FIC-001 (Cascade Setpoint)**
+- **Nature**: Direct influence - TIC-002's output becomes FIC-001's setpoint
+- **Active Conditions**: When FIC-001 is in CASCADE mode during normal operation
+- **Purpose**: Master controller adjusts flow setpoint to maintain reactor temperature
+- **Failure Behavior**: On communication loss, FIC-001 holds last setpoint or switches to manual
+
+**2. FT-001 → FIC-001 (Process Feedback)**
+- **Nature**: Direct measurement feedback
+- **Active Conditions**: Always active when FIC-001 is operational
+- **Purpose**: Provides actual flow rate for comparison with setpoint
+- **Failure Behavior**: Forces switch to manual valve control, breaks cascade
+
+**3. FIC-001 → Control Valve (Manipulated Variable)**
+- **Nature**: Direct control - controller output positions valve
+- **Active Conditions**: Active in both CASCADE and MANUAL modes
+- **Purpose**: Adjusts valve opening to maintain desired flow rate
+- **Failure Behavior**: Valve failure triggers backup systems or emergency shutdown
+
+### Control Logic:
+
+The cascade arrangement provides:
+- **Fast disturbance rejection**: Flow disturbances are corrected by FIC-001 before affecting reactor temperature
+- **Improved stability**: Inner loop is tuned for fast response, outer loop for stable temperature control
+- **Operational flexibility**: Can break cascade and operate loops independently during abnormal conditions
+
+The system maintains reactor temperature indirectly by precisely controlling inlet flow, with the temperature controller determining the required flow rate and the flow controller executing that requirement. 
+
+Model: claude-opus-4-20250514
+
+Response:
+[ThinkingBlock(signature='EsgLCkYIBBgCKkBAfXulCs8nY0NShEyLzk1CYehFd+rwZEnlxnEl81zvEab5Yfky1CN3v5EZy7TiJ0cKj+Kx96BGtU0GpX73/e/gEgyi8HL920jYH3lJm7QaDOGaonqmUa/a++AkBSIwRUnckIs3d6aY5+J7GsYTBu8f9jo2Lr3G4ucg6ZnwNIJdNvFwnEPeA+/RwNXqRcuuKq8KiQB0tMzqkGnygN28tS+z8wivcg/VY/KjevpoQfK8QZV+YBYxXW0M5XywAZoRwdb9LCuGRVIxLxmd8xnV2oOqQ7lXlLsjLR2LfCl0E4SoyyKh9oTps+hLVfyxVTncTweQHYcQ6IyU9jq1TgKPiAZC3IRay1qXz5CsOFtRPODmtKU4e07nkoUnYWMjmieu6ozd6Vx6vFSzV0uGOmZji33osNFIcVSwyYzDSlxHK9smwOvT2+5UZO4qjyZeORdq5sRWuxLDdrMd0mwMrfRlxXm0qr8GsIN1+viquCrnXTbraBcTgrvgOAmZwNCPs3k5FznimGIfq/izbcqZwZnMiA0hOHhsPwhx300EhDy4GyjXBzDKXUhF/4M+mTnRj1PyFN6xpeXtK4E1vBGKFHuxo84wtEZoOr2IMttnFR2hO6fCpjHIAs0D3Ne/UYPPKSaai3ulHn8G61b49+scaoOVm+k8JkqqWx7OowMZFNS56tbWyuIZ+ejl7hXncUZxDi8vzV7I5iUb64ziaGmsLVbZ3Xnj94REGFwprb0wg4GxDMTE5VAf/PBC2fPTi1xa6tXp6QAr25l4IeK6vVDyM89Dq8A/3F3TcN+5hhoyrVEnfmNuSAw87Uvqdup9ZGjebxGBkfEMp7OOJOmZKduiIO47zlSvMDxjTLOHHwLgaGNoB1T/YhVn3u2w/4NNE9JBfQ89MthCuwiDNtWwJhdq4kMD1+1i8w4XNzv7zNaRLZVLTAZkhBvKrTX5Xf0qGhw91E6vK2980LohSYODyH9jopypLiUwgEUdmM1ggw4JL8JlTgRw+ztJAcCYWjmfpnOkUfpbndnu4Jvfv6EwWD1cRUsOQdqviastzjQk1lZfXu2bnc3HaiQBlKXopkhJOyvsfGBw5SojVJ44o/fN2B8dXO0iNBjiSfoAugkQOBrHt1tbrPRl8eBsbsI2UnCzG/U24096oQgjNubeQJh13Uq/fwl1ovmqYclX+xHLvvjNShNOit39vvPqb952hKd4d0UmIaJCNrpd84VX7dUN0zHrfFIUd1rS8nl1fKWhkUgtp6f91PAgkQ5GgK9ulTUv5daP7D5W0Ccx1FiQqYzWx6ldPngBhV9rymSRzYu5UojdiYBqgBzi8SLtyns0+qwGISVk1Q6oI1gVElB3swj36fR826WGy1y37GlVzCaasvNyEiywC/Sq4RFMrvP4XMmVMubaCBs+kdQ3HIugjVUDTrXZg+PVcBNKnDKkeeADjP365VEIoY4864AlIGVi7II7X7eQKGJRhBnsDyOHuYMg+mW833yiHQt4jD7u4sRFrcUs03vGnYqgLasKQRYOeW3SOpD6XrgwV2gPQS/z1XaaxFzxJkXc/F/4p51uAGFSnXffCwLl6ucKSyys60zjghFBY3oxWkiNS6Zb+IIFFXpPEYc1rMv2tfTN0sT2ElVWYQov6ZywVcK8iWXa9ulQQtKuK77Ly7F0d0TCNhCg82v6n3MasiU1IZqZS9TBYHOn+iQ+RCRaIwGWjWVHftHMocuYA7RYpQuchmOXMrFK8gFgX1cTvCaLaTCfs4pBpKgCH/O8+scwiolTNURBX9LmA8B2DEYMPUPohJ03ClHIXzxuQWSuWk1iTLplSh4W4WzWOzyqk5bnJ4S65vahe30bR9RrOlrt+HSu9hlxsXUhtnwkib0OLDbmzHzdfFgXkAj7c6O1uKQuXskF++3bzMQ4pUbNS5XdZlZxAaNbEHiQlMTu+p0K8vPmeKyaudFAnaU1oGlnTPZbhwgaIhgB', 
+thinking='Looking at the three codes, I need to identify the complete control system structure:
+
+1. Code 1 describes:
+   - Three temperature transmitters (TT-002a, TT-002b, TT-002c)
+   - High temperature selector (>)
+   - Output to temperature controller TIC-002
+   
+2. Code 2 describes:
+   - TIC-002 (Master Temperature Controller) - reverse acting
+   - Temperature setpoint input
+   - Cascade output to FIC-001
+   
+3. Code 3 describes:
+   - FIC-001 (Slave Flow Controller)
+   - Flow measurement FT-001
+   - Control valve output
+
+The complete signal flow is:
+- TT-002a, TT-002b, TT-002c → High Selector
+- High Selector → TIC-002 (process variable)
+- Temperature Setpoint → TIC-002
+- TIC-002 → FIC-001 (cascade setpoint)
+- FT-001 → FIC-001 (process variable)
+- FIC-001 → Control Valve
+
+Key relationships:
+1. Only the highest temperature transmitter influences the high selector output at any time
+2. High selector output to TIC-002 PV - direct
+3. Temperature setpoint to TIC-002 - direct
+4. TIC-002 PV to TIC-002 output - reverse (as temperature rises, output decreases)
+5. TIC-002 output to FIC-001 setpoint - direct (cascade)
+6. FT-001 to FIC-001 - direct feedback
+7. FIC-001 output to valve - direct
+
+I need to create conditions for when each transmitter is active (highest) and model the cascade properly.', type='thinking'), TextBlock(citations=None, text='% Temperature transmitter measurements
+temperature_tt002a(75.2).
+temperature_tt002b(74.8).
+temperature_tt002c(75.5).
+
+% Temperature setpoint
+temperature_setpoint(75.0).
+
+% Flow measurement
+flow_measurement(45.3).
+
+% Controller outputs and valve position
+tic002_output(42.7).
+fic001_output(67.8).
+valve_position(67.8).
+
+% Controller modes
+tic002_active.
+fic001_cascade_mode.
+
+% High selector logic
+high_selector_output(Value) :-
+    temperature_tt002a(A),
+    temperature_tt002b(B),
+    temperature_tt002c(C),
+    max_of_three(A, B, C, Value).
+
+max_of_three(A, B, C, A) :- A >= B, A >= C.
+max_of_three(A, B, C, B) :- B > A, B >= C.
+max_of_three(A, B, C, C) :- C > A, C > B.
+
+% Determine which transmitter is controlling
+active_transmitter(tt002a) :-
+    temperature_tt002a(A),
+    temperature_tt002b(B),
+    temperature_tt002c(C),
+    A >= B, A >= C.
+
+active_transmitter(tt002b) :-
+    temperature_tt002a(A),
+    temperature_tt002b(B),
+    temperature_tt002c(C),
+    B > A, B >= C.
+
+active_transmitter(tt002c) :-
+    temperature_tt002a(A),
+    temperature_tt002b(B),
+    temperature_tt002c(C),
+    C > A, C > B.
+
+% Causal relationships
+causal_relation(tt002a, high_selector, direct) :-
+    active_transmitter(tt002a).
+
+causal_relation(tt002b, high_selector, direct) :-
+    active_transmitter(tt002b).
+
+causal_relation(tt002c, high_selector, direct) :-
+    active_transmitter(tt002c).
+
+causal_relation(high_selector, tic002_pv, direct) :-
+    tic002_active.
+
+causal_relation(temperature_setpoint, tic002_output, direct) :-
+    tic002_active.
+
+causal_relation(tic002_pv, tic002_output, reverse) :-
+    tic002_active.
+
+causal_relation(tic002_output, fic001_setpoint, direct) :-
+    tic002_active,
+    fic001_cascade_mode.
+
+causal_relation(flow_measurement, fic001_output, reverse) :-
+    fic001_cascade_mode.
+
+causal_relation(fic001_setpoint, fic001_output, direct) :-
+    fic001_cascade_mode.
+
+causal_relation(fic001_output, valve_position, direct) :-
+    fic001_cascade_mode.
+
+% Active causal relations finder
+active_causal_relations(Relations) :-
+    findall([PV, CV, Type], causal_relation(PV, CV, Type), Relations).
+
+% Controller status
+controller_status(tic002, active) :-
+    tic002_active.
+
+controller_status(fic001, cascade) :-
+    fic001_cascade_mode.', type='text')]
