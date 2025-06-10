@@ -1,0 +1,16 @@
+Secondary Control Loop: FIC-001 (Slave Flow Controller)
+    ***WHERE?*** - Slave flow controller in cascade arrangement with TIC-002, controlling inlet flow to reactor via control valve positioned upstream of reactor. 
+    Flow transmitter FT-001 provides process feedback. Receives external setpoint from TIC-002 master controller.
+    ***WHY?*** - Functions as slave controller in cascade system to     provide rapid response to flow disturbances before they can upset reactor temperature. 
+    Maintains precise flow control to achieve temperature control objectives determined by master controller TIC-002. Improves overall control system performance and disturbance 
+    rejection.
+    ***WHAT?*** - Slave flow controller accepting external setpoint from TIC-002 output and maintaining actual flow rate to match this setpoint. Provides fast inner loop control in 
+    cascade strategy. Includes flow indication, high/low flow alarms, and valve position indication for operational feedback.
+    ***HOW?*** - PID flow controller receives setpoint signal from TIC-002, compares to actual flow measurement from FT-001, and adjusts control valve position accordingly. 
+    Tuned for fast response without oscillation to minimize flow disturbances that could affect reactor temperature control.
+    ***WHEN?*** - Operational in cascade mode during normal reactor operation. Can be switched to manual mode with operator-defined setpoint when cascade is broken or during 
+    startup/shutdown sequences. Active whenever flow control to the reactor is required.
+    ***WHAT IF?*** - FT-001 failure: Switch to manual valve control, break cascade connection with TIC-002, rely on manual flow estimation and direct temperature control. 
+    Control valve failure: Isolate flow path, activate backup feed system if available, emergency reactor shutdown if no alternatives. Loss of setpoint from TIC-002: 
+    Controller maintains last received setpoint, switch to manual mode with operator-defined setpoint. Cascade communication failure: Break cascade, operate both controllers 
+    independently in manual mode.
