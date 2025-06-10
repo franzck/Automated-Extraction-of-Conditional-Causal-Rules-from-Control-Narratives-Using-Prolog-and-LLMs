@@ -1,0 +1,15 @@
+Primary Control Loop: TIC-002 (Master Temperature Controller)
+***WHERE?*** - Master temperature controller receiving input from the high temperature selector. Located in the control system with output providing cascade setpoint 
+to FIC-001 flow controller. Controls overall reactor temperature through manipulation of inlet flow rate.
+***WHY?*** - Reactor temperature control is critical for safety, 
+product quality, reaction kinetics, and preventing thermal runaway. Cascade control strategy employed because flow changes provide faster temperature response than 
+direct thermal manipulation. Temperature control prevents equipment damage and maintains process efficiency.
+***WHAT?*** - Master controller in cascade control system that maintains reactor temperature at setpoint by manipulating the setpoint of the slave flow controller FIC-001. 
+Receives temperature feedback from high selector and provides flow setpoint output. Includes temperature indication, alarm functions, and emergency shutdown capabilities.
+***HOW?*** - PID temperature controller receives highest temperature signal from high selector, compares to temperature setpoint, and calculates required flow setpoint for FIC-001. 
+Controller output scaled to provide appropriate flow setpoint range. Includes adaptive tuning and anti-windup protection.
+WHEN? Operational during all reactor operating modes when temperature control is required. Active continuously during normal operation. Can be switched to manual mode during 
+startup/shutdown procedures or cascade system maintenance, providing fixed setpoint to FIC-001.
+***WHAT IF?*** - Input failure from high selector: Switch to manual mode, use backup temperature indication if available, consider controlled shutdown. High temperature alarm: 
+Controller automatically reduces flow setpoint to FIC-001, activates emergency cooling if configured. Controller failure: Break cascade, operate FIC-001 in manual mode with fixed 
+setpoint, implement manual temperature monitoring and control. Setpoint deviation: Check for process upsets, controller tuning issues, or equipment problems affecting heat removal.
